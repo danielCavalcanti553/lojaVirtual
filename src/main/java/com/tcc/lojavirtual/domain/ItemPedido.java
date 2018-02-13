@@ -5,51 +5,27 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class ItemPedido implements Serializable{
-	
+public class ItemPedido  implements Serializable{
+
 	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
-	private ItemPedidoPK codigoItemPedido = new ItemPedidoPK();
-	
+	private ItemPedidoPk codigoItem = new ItemPedidoPk();
+
 	private Integer quantidade;
-	private Double preco;
 	
+	public ItemPedido(Pedido pedido, Produto produto, Integer quantidade) {
+		codigoItem.setPedido(pedido);
+		codigoItem.setProduto(produto);
+		
+		this.quantidade = quantidade;
+	}
 	public ItemPedido() {
 	}
-
-	public ItemPedido(Pedido pedido, Produto produto,Integer quantidade, Double preco) {
-		codigoItemPedido.setPedido(pedido);
-		codigoItemPedido.setProduto(produto);
-		this.quantidade = quantidade;
-		this.preco = preco;
-	}
-
-	public Pedido getPedido() {
-		return codigoItemPedido.getPedido();
-	}
-
-	public void setCodigoPedido(Pedido pedido) {
-		codigoItemPedido.setPedido(pedido);
-	}
-
-	public Produto getProduto() {
-		return codigoItemPedido.getProduto();
-	}
-
-	public void setCodigoProduto(Produto produto) {
-		codigoItemPedido.setProduto(produto);
-	}
 	
-	public ItemPedidoPK getCodigoItemPedido() {
-		return codigoItemPedido;
-	}
-
-	public void setCodigoItemPedido(ItemPedidoPK codigoItemPedido) {
-		this.codigoItemPedido = codigoItemPedido;
-	}
-
 	public Integer getQuantidade() {
 		return quantidade;
 	}
@@ -57,17 +33,54 @@ public class ItemPedido implements Serializable{
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
 	}
-
-	public Double getPreco() {
-		return preco;
-	}
-
-	public void setPreco(Double preco) {
-		this.preco = preco;
+	
+	@JsonIgnore
+	public Pedido getPedido() {
+		return codigoItem.getPedido();
 	}
 	
+	public void setPedido(Pedido pedido) {
+		codigoItem.setPedido(pedido);
+	}
+	
+	public Produto getProduto() {
+		return codigoItem.getProduto();
+	}
+	
+	public void setProduto(Produto produto) {
+		codigoItem.setProduto(produto);
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigoItem == null) ? 0 : codigoItem.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItemPedido other = (ItemPedido) obj;
+		if (codigoItem == null) {
+			if (other.codigoItem != null)
+				return false;
+		} else if (!codigoItem.equals(other.codigoItem))
+			return false;
+		return true;
+	}
 	
 	
 	
+
+
+	
+	
+
 	
 }

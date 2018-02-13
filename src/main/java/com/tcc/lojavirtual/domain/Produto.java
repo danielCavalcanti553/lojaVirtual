@@ -26,6 +26,7 @@ public class Produto implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer codigoProduto;
+	
 	private String nomeProduto;
 	private Integer quantidadeEstoque;
 	private Double preco;
@@ -40,12 +41,14 @@ public class Produto implements Serializable{
 	private List<Categoria> categorias = new ArrayList<Categoria>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="codigoItemPedido.produto")
+	@OneToMany(mappedBy="codigoItem.produto")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
-	// CONSTRUTOR
 	public Produto() {
-	}	
+	}
+	/*	
+	//@JsonIgnore
+		*/
 	
 	public Produto(Integer codigoProduto, String nomeProduto, Integer quantidadeEstoque, Double preco) {
 		super();
@@ -55,22 +58,24 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 	
+	@JsonIgnore
+	public List<Pedido> getPedidos() {
+		List<Pedido> lista = new ArrayList<>();
+		for (ItemPedido x : itens) {
+			//lista.add(x.getPedido());
+		}
+		return lista;
+	}
+	
 	//GET SET
 	public Integer getCodigoProduto() {
 		return codigoProduto;
 	}
 
-	public List<Categoria> getCategorias() {
-		return categorias;
-	}
-
-	public void setCategorias(List<Categoria> categorias) {
-		this.categorias = categorias;
-	}
-
 	public void setCodigoProduto(Integer codigoProduto) {
 		this.codigoProduto = codigoProduto;
 	}
+	
 	public String getNomeProduto() {
 		return nomeProduto;
 	}
@@ -89,6 +94,17 @@ public class Produto implements Serializable{
 	public void setPreco(Double preco) {
 		this.preco = preco;
 	}
+	
+	
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+
 
 	public Set<ItemPedido> getItens() {
 		return itens;

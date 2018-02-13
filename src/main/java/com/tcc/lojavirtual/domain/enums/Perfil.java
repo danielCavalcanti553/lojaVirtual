@@ -1,14 +1,15 @@
-package com.tcc.lojavirtual.domain;
+package com.tcc.lojavirtual.domain.enums;
 
-public enum TipoHistorico {
+
+public enum Perfil {
 	
-	ENTRADA(1,"Entrada"),
-	SAIDA(2,"Saida");
+	ADMIN(1,"ROLE_ADMIN"),
+	CLIENTE(2,"ROLE_CLIENTE");
 	
 	private int cod;
 	private String descricao;
 	
-	private TipoHistorico(int cod,String desc) {
+	private Perfil(int cod,String desc) {
 		this.cod = cod;
 		this.descricao = desc;
 	}
@@ -21,13 +22,13 @@ public enum TipoHistorico {
 		return descricao;
 	}
 
-	public static TipoHistorico toEnum(Integer cod) {
+	public static Perfil toEnum(Integer cod) {
 		
 		if(cod==null) {
 			return null;
 		}
 		
-		for(TipoHistorico t : TipoHistorico.values()) {
+		for(Perfil t : Perfil.values()) {
 			if(cod.equals(t.getCod())) {
 				return t;
 			}

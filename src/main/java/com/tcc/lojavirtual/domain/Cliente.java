@@ -2,18 +2,22 @@ package com.tcc.lojavirtual.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.br.CPF;
+import com.tcc.lojavirtual.domain.enums.Perfil;
 
 @Entity
 public class Cliente implements Serializable{
@@ -23,42 +27,29 @@ public class Cliente implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer codigoCliente;
-	
-	@NotEmpty(message="CPF obrigatório")
-	@CPF
+
 	private String cpf;
 	
-	@NotEmpty(message="Nome obrigatório")
-	@Length(min=5,max=120,message = "O tamanho deve ser entre 5 e 80 caracteres!")	
 	private String nome;
-	
-	@NotEmpty(message="Endereço obrigatório")
-	@Length(min=5,max=120,message = "O tamanho deve ser entre 5 e 80 caracteres!")
 	private String endereco;
 	
-	@NotEmpty(message="Município obrigatório")
-	@Length(min=5,max=120,message = "O tamanho deve ser entre 5 e 80 caracteres!")
 	private String municipio;
-	
-	@NotEmpty(message="Estado obrigatório")
-	@Length(min=2,max=50,message = "Estado inválido!")
 	private String estado;
-	
-	@NotEmpty(message="Telefone obrigatório")
 	private String telefone;
 	
-	@NotEmpty(message="E-mail obrigatório")
-	@Email
+	@Column(unique=true)
 	private String email;
 	
-	@NotEmpty(message="Senha obrigatório")
-	@Length(min=5,max=120,message = "O tamanho deve ser entre 5 e 80 caracteres!")
 	private String senha;
 	
 	@OneToMany(mappedBy="cliente")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
 	
-	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="PERFIS")
+	private Set<Integer> perfis = new HashSet<>();
+
+
 	public Cliente(Integer codigoCliente, String cpf, String nome, String endereco, String municipio, String estado,
 			String telefone, String email, String senha) {
 		super();
@@ -71,11 +62,22 @@ public class Cliente implements Serializable{
 		this.telefone = telefone;
 		this.email = email;
 		this.senha = senha;
+		setPerfis(Perfil.CLIENTE);
 	}
 
 	public Cliente() {
+		setPerfis(Perfil.CLIENTE);
 	}
 
+	
+	public Set<Perfil> getPerfis() {
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	public void setPerfis(Perfil perfil) {
+		perfis.add(perfil.getCod());
+	}
+	
 	public Integer getCodigoCliente() {
 		return codigoCliente;
 	}

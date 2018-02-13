@@ -28,18 +28,21 @@ public class Pedido implements Serializable{
 	
 	@JsonFormat(pattern="dd/mm/yyyy hh:mm")
 	private Date dataPedido;
+
+	
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
+	private Pagamento pagamento;
 	
 	@ManyToOne
 	@JoinColumn(name="cliente_codigo_cliente")
 	private Cliente cliente;
 	
-	@OneToMany(mappedBy="codigoItemPedido.pedido")
+	
+	@OneToMany(mappedBy="codigoItem.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
-	
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
-	private Pagamento pagamento;
-	
+
 	public Pedido(Integer codigoPedido, Date dataPedido, Cliente cliente) {
+		super();
 		this.codigoPedido = codigoPedido;
 		this.dataPedido = dataPedido;
 		this.cliente = cliente;
@@ -47,6 +50,17 @@ public class Pedido implements Serializable{
 
 	public Pedido() {
 	}
+
+/*
+	public  double getValorTotal() {
+		double soma = 0.0;
+		for(ItemPedido ip : itens) {
+			soma = soma + ip.getSubTotal();
+		}
+		return soma;
+	}*/
+
+	
 
 	public Integer getCodigoPedido() {
 		return codigoPedido;
@@ -72,8 +86,6 @@ public class Pedido implements Serializable{
 		this.cliente = cliente;
 	}
 	
-	
-
 	public Pagamento getPagamento() {
 		return pagamento;
 	}

@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
+import com.tcc.lojavirtual.domain.enums.TipoHistorico;
 @Entity
 public class Historico implements Serializable{
 	

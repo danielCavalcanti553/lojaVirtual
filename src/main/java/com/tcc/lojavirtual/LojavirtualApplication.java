@@ -15,14 +15,15 @@ import com.tcc.lojavirtual.domain.ItemPedido;
 import com.tcc.lojavirtual.domain.Pagamento;
 import com.tcc.lojavirtual.domain.Pedido;
 import com.tcc.lojavirtual.domain.Produto;
-import com.tcc.lojavirtual.domain.TipoHistorico;
+import com.tcc.lojavirtual.domain.enums.Perfil;
+import com.tcc.lojavirtual.domain.enums.TipoHistorico;
 import com.tcc.lojavirtual.repository.CategoriaRepository;
 import com.tcc.lojavirtual.repository.ClienteRepository;
 import com.tcc.lojavirtual.repository.HistoricoRepository;
 import com.tcc.lojavirtual.repository.ItemPedidoRepository;
+import com.tcc.lojavirtual.repository.PagamentoRepository;
 import com.tcc.lojavirtual.repository.PedidoRepository;
 import com.tcc.lojavirtual.repository.ProdutoRepository;
-import com.tcc.lojavirtual.repository.PagamentoRepository;
 
 @SpringBootApplication
 public class LojavirtualApplication implements CommandLineRunner{
@@ -107,6 +108,7 @@ public class LojavirtualApplication implements CommandLineRunner{
 		historicoRepository.save(Arrays.asList(his1,his2,his3,his4,his5,his6,his7,his8));
 		
 		Cliente cli1 = new Cliente(null,"35314131390","Daniel Souza","Rua x", "Rio de Janeiro","RJ","(21)9821-0192","daniel@daniel.com","123456");
+		cli1.setPerfis(Perfil.ADMIN);
 		Cliente cli2 = new Cliente(null,"25093295884","Marcia Gomes","Rua y", "São Paulo","SP","(11)2133-2333","marcia@marcia.com","123456");
 		clienteRepository.save(Arrays.asList(cli1,cli2));
 		
@@ -114,11 +116,11 @@ public class LojavirtualApplication implements CommandLineRunner{
 		Pedido ped2 = new Pedido(null,new Date(),cli2);
 		
 		
-		ItemPedido item1 = new ItemPedido(ped1,pro1,1,pro1.getPreco());
-		ItemPedido item2 = new ItemPedido(ped1,pro2,1,pro2.getPreco());
-		ItemPedido item3 = new ItemPedido(ped1,pro3,1,pro3.getPreco());
-		ItemPedido item4 = new ItemPedido(ped2,pro1,1,pro1.getPreco());
-
+		//ItemPedido item1 = new ItemPedido(ped1,pro1,1,pro1.getPreco());
+		//ItemPedido item2 = new ItemPedido(ped1,pro2,1,pro2.getPreco());
+		//ItemPedido item3 = new ItemPedido(ped1,pro3,1,pro3.getPreco());
+		//ItemPedido item4 = new ItemPedido(ped2,pro1,1,pro1.getPreco());
+		ItemPedido item1 = new ItemPedido(ped2,pro1,30);
 		
 		Pagamento pag1 = new Pagamento(null, new Date(), "1234123412341234", 10000, ped1);
 		ped1.setPagamento(pag1);
@@ -129,14 +131,15 @@ public class LojavirtualApplication implements CommandLineRunner{
 		
 		
 		
-		ped1.getItens().addAll(Arrays.asList(item1,item2,item3));
-		ped2.getItens().addAll(Arrays.asList(item4));
+		//ped1.getItens().addAll(Arrays.asList(item1,item2,item3));
+		//ped2.getItens().addAll(Arrays.asList(item4));
+		//
+		//pro1.getItens().addAll(Arrays.asList(item1,item4));
+		//pro2.getItens().addAll(Arrays.asList(item2));
+		//pro3.getItens().addAll(Arrays.asList(item3));
 		
-		pro1.getItens().addAll(Arrays.asList(item1,item4));
-		pro2.getItens().addAll(Arrays.asList(item2));
-		pro3.getItens().addAll(Arrays.asList(item3));
-		
-		itemPedidoRepository.save(Arrays.asList(item1,item2,item3,item4));
+		//itemPedidoRepository.save(Arrays.asList(item1,item2,item3,item4));
+		itemPedidoRepository.save(Arrays.asList(item1));
 		
 	}
 }

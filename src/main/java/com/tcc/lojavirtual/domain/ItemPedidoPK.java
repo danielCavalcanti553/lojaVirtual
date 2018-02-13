@@ -7,18 +7,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Embeddable
-public class ItemPedidoPK implements Serializable{
-	
+public class ItemPedidoPk  implements Serializable{
+
+
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne
-	@JoinColumn(name="pedido_codigo_pedido")
+	@JoinColumn(name="codigoPedido_pedido")
 	private Pedido pedido;
-
+	
 	@ManyToOne
-	@JoinColumn(name="produto_codigo_produto")
+	@JoinColumn(name="codigoProduto_produto")
 	private Produto produto;
-
+	
+	
+	
 	public Pedido getPedido() {
 		return pedido;
 	}
@@ -52,7 +55,7 @@ public class ItemPedidoPK implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ItemPedidoPK other = (ItemPedidoPK) obj;
+		ItemPedidoPk other = (ItemPedidoPk) obj;
 		if (pedido == null) {
 			if (other.pedido != null)
 				return false;
@@ -65,6 +68,10 @@ public class ItemPedidoPK implements Serializable{
 			return false;
 		return true;
 	}
-	
 
+
+
+
+
+	
 }

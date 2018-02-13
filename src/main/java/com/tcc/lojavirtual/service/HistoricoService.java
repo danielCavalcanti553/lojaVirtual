@@ -22,6 +22,4 @@ public class HistoricoService {
 		return historicoRepository.save(obj);
 	}
 	
-
-	
 }
