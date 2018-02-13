@@ -51,26 +51,23 @@ public class PedidoService {
 		
 		obj.setCodigoPedido(null);
 		obj.setDataPedido(new Date());
-		obj.getPagamento().setDataPagamento(new Date());
-		
-		
+		obj.getPagamento().setDataPagamento(new Date());		
 		obj.getPagamento().setPedido(obj);
 		obj.setCliente(clienteRepository.findOne(obj.getCliente().getCodigoCliente()));
-		
 		obj = pedidoRepository.save(obj);
 
-		
 		for(ItemPedido ip : obj.getItens()) {
 			ip.setProduto(produtoRepository.findOne(ip.getProduto().getCodigoProduto()));
 			ip.setPreco(ip.getProduto().getPreco());
 			ip.setQuantidade(ip.getQuantidade());
 			ip.setPedido(obj);
-			//obj.getPagamento().setValor(ip.getSubTotal()+obj.getPagamento().getValor());
 		}
 		
 		obj.getPagamento().setValor(obj.getValorTotal());
+		
 		pagamentoRepository.save(obj.getPagamento());
 		itemPedidoRepository.save(obj.getItens());
+		
 		return obj;
 	}
 	
