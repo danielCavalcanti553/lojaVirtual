@@ -116,11 +116,11 @@ public class LojavirtualApplication implements CommandLineRunner{
 		Pedido ped2 = new Pedido(null,new Date(),cli2);
 		
 		
-		//ItemPedido item1 = new ItemPedido(ped1,pro1,1,pro1.getPreco());
-		//ItemPedido item2 = new ItemPedido(ped1,pro2,1,pro2.getPreco());
-		//ItemPedido item3 = new ItemPedido(ped1,pro3,1,pro3.getPreco());
-		//ItemPedido item4 = new ItemPedido(ped2,pro1,1,pro1.getPreco());
-		ItemPedido item1 = new ItemPedido(ped2,pro1,30);
+		ItemPedido item1 = new ItemPedido(ped1,pro1,1,pro1.getPreco());
+		ItemPedido item2 = new ItemPedido(ped1,pro2,1,pro2.getPreco());
+		ItemPedido item3 = new ItemPedido(ped1,pro3,1,pro3.getPreco());
+		ItemPedido item4 = new ItemPedido(ped2,pro1,1,pro1.getPreco());
+		
 		
 		Pagamento pag1 = new Pagamento(null, new Date(), "1234123412341234", 10000, ped1);
 		ped1.setPagamento(pag1);
@@ -131,15 +131,15 @@ public class LojavirtualApplication implements CommandLineRunner{
 		
 		
 		
-		//ped1.getItens().addAll(Arrays.asList(item1,item2,item3));
-		//ped2.getItens().addAll(Arrays.asList(item4));
+		ped1.getItens().addAll(Arrays.asList(item1,item2,item3));
+		ped2.getItens().addAll(Arrays.asList(item4));
 		//
-		//pro1.getItens().addAll(Arrays.asList(item1,item4));
-		//pro2.getItens().addAll(Arrays.asList(item2));
-		//pro3.getItens().addAll(Arrays.asList(item3));
+		pro1.getItens().addAll(Arrays.asList(item1,item4));
+		pro2.getItens().addAll(Arrays.asList(item2));
+		pro3.getItens().addAll(Arrays.asList(item3));
 		
-		//itemPedidoRepository.save(Arrays.asList(item1,item2,item3,item4));
-		itemPedidoRepository.save(Arrays.asList(item1));
+		itemPedidoRepository.save(Arrays.asList(item1,item2,item3,item4));
+		
 		
 	}
 }
