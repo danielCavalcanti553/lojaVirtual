@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tcc.lojavirtual.domain.Cliente;
@@ -19,6 +20,9 @@ import com.tcc.lojavirtual.service.exception.NotFoundObjectException;;
 @Service
 public class ClienteService {
 
+	@Autowired
+	private BCryptPasswordEncoder passCrypt;
+	
 	@Autowired
 	private ClienteRepository clienteRepository;
 
@@ -36,7 +40,7 @@ public class ClienteService {
 
 	public Cliente fromNewDTO(ClienteNewDTO obj) {
 		Cliente c = new Cliente(null, obj.getCpf(), obj.getNome(), obj.getEndereco(), obj.getMunicipio(),
-				obj.getEstado(), obj.getTelefone(), obj.getEmail(), obj.getSenha());
+				obj.getEstado(), obj.getTelefone(), obj.getEmail(), passCrypt.encode(obj.getSenha()));
 		return c;
 	}
 

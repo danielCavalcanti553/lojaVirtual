@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tcc.lojavirtual.domain.enums.Perfil;
 
 @Entity
@@ -40,6 +41,7 @@ public class Cliente implements Serializable{
 	@Column(unique=true)
 	private String email;
 	
+	@JsonIgnore
 	private String senha;
 	
 	@OneToMany(mappedBy="cliente")
