@@ -10,7 +10,10 @@ import com.tcc.lojavirtual.domain.Cliente;
 import com.tcc.lojavirtual.repository.ClienteRepository;
 import com.tcc.lojavirtual.service.exception.NotFoundObjectException;
 
-
+/*
+ * 
+ * Gera uma nova senha para o cliente e envia por e-mail
+ * */
 @Service
 public class AuthService {
 	
@@ -22,8 +25,8 @@ public class AuthService {
 	
 	private Random rand = new Random();
 	
-	//@Autowired
-	//private EmailService emailService;
+	@Autowired
+	private EmailService emailService;
 	
 	public void sendNewPassword(String email) {
 		Cliente cliente = clienteRepository.findByEmail(email);
@@ -35,7 +38,7 @@ public class AuthService {
 		cliente.setSenha(be.encode(newPass));
 		
 		clienteRepository.save(cliente);
-		//emailService.sendNewPasswordEmail(cliente,newPass);
+		emailService.sendNewPasswordEmail(cliente,newPass);
 	}
 
 	private String newPassword() {
@@ -45,20 +48,14 @@ public class AuthService {
 		}
 		return new String(vet);
 	}
-
+	
+	// Gerar uma senha forte
 	private char ramdomChar() {
-		int opt = rand.nextInt(3);
-		if(opt == 0) {// gera digito
-			
-			return (char) (rand.nextInt(10)+48);
-			
-		}else if(opt ==1) { // gera letra maíuscula
-			
-			return (char) (rand.nextInt(26)+65);
-		}else { // gera letra minúscula
-			
-			return (char) (rand.nextInt(26)+97);
-		}
+		
+		int opt = rand.nextInt(3);								// Gera um número inteiro (0,1 ou 2)
+		if(opt == 0) return (char) (rand.nextInt(10)+48); 		// gera digito
+		else if(opt ==1) return (char) (rand.nextInt(26)+65); 	// gera letra maíuscula
+		else  return (char) (rand.nextInt(26)+97);				// gera letra minúscula
 		
 	}
 	

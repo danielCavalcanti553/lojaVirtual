@@ -55,5 +55,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		res.addHeader("Authorization", "Bearer " + token);
 		// Liberando o Header Authorization para o Cors (Authentication é um nome de header personalizado)
 		res.addHeader("access-control-expose-headers", "Authorization");
+		
 	}
 }

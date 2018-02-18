@@ -38,7 +38,11 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	
+	@RequestMapping(value="/email",method=RequestMethod.GET)
+	public ResponseEntity<Cliente> find(@RequestParam(name="value") String email){
+		Cliente obj = clienteService.findByEmail(email);
+		return ResponseEntity.ok().body(obj);
+	}	
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll(){
@@ -46,7 +50,6 @@ public class ClienteResource {
 		List<ClienteDTO> dto = list.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(dto);
 	}
-	
 	
 	
 	@RequestMapping(value="/page",method=RequestMethod.GET)

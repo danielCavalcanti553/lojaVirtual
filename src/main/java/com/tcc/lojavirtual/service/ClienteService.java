@@ -49,6 +49,18 @@ public class ClienteService {
 			throw new NotFoundObjectException("Cliente Não encontrado! " + id + ", Tipo " + Cliente.class.getName());
 		return obj;
 	}
+	
+	public Cliente findByEmail(String email) {
+		// Mesma implementação do find mas utilizando email
+		UserSecurity user = UserService.authenticated();
+		if(user==null ||  !user.hasRole(Perfil.ADMIN) && !email.equals(user.getUsername())) 
+			throw new AuthorizationException("Acesso Negado!");
+		
+		Cliente obj = clienteRepository.findOne(user.getId());
+		if (obj == null)
+			throw new NotFoundObjectException("Cliente Não encontrado! Id: " + user.getId() + ", Tipo " + Cliente.class.getName());
+		return obj;
+	}
 
 	public Cliente insert(Cliente obj) {
 		obj.setCodigoCliente(null);
