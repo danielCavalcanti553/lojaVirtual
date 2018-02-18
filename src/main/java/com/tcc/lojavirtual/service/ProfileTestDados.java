@@ -105,9 +105,9 @@ public class ProfileTestDados{
 		Historico his8 = new Historico(null,new Date(),4,TipoHistorico.ENTRADA,pro8);
 		historicoRepository.save(Arrays.asList(his1,his2,his3,his4,his5,his6,his7,his8));
 		
-		Cliente cli1 = new Cliente(null,"35314131390","Daniel Souza","Rua x", "Rio de Janeiro","RJ","(21)9821-0192","daniel@daniel.com",passCrypt.encode("123456"));
+		Cliente cli1 = new Cliente(null,"35314131390","Daniel Souza","Rua x", "Rio de Janeiro","RJ","(21)9821-0192","danielsouza553@gmail.com",passCrypt.encode("123456"));
 		cli1.setPerfis(Perfil.ADMIN);
-		Cliente cli2 = new Cliente(null,"25093295884","Marcia Gomes","Rua y", "São Paulo","SP","(11)2133-2333","marcia@marcia.com",passCrypt.encode("123456"));
+		Cliente cli2 = new Cliente(null,"25093295884","Marcia Gomes","Rua y", "São Paulo","SP","(11)2133-2333","daniel.cavalcanti@outlook.com.br",passCrypt.encode("123456"));
 		clienteRepository.save(Arrays.asList(cli1,cli2));
 		
 		Pedido ped1 = new Pedido(null,new Date(),cli1);
@@ -126,7 +126,6 @@ public class ProfileTestDados{
 		ped2.setPagamento(pag2);		
 		pedidoRepository.save(Arrays.asList(ped1,ped2));
 		pagamentoRepository.save(Arrays.asList(pag1,pag2));
-		
 		
 		
 		ped1.getItens().addAll(Arrays.asList(item1,item2,item3));

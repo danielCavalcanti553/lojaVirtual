@@ -1,8 +1,11 @@
 package com.tcc.lojavirtual.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -125,6 +128,26 @@ public class Pedido implements Serializable{
 		} else if (!codigoPedido.equals(other.codigoPedido))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat n = NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
+		SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Pedido Nùmero: ");
+		builder.append(getCodigoPedido());
+		builder.append("\nData: ");
+		builder.append(s.format(getDataPedido()));
+		builder.append("\nCliente: ");
+		builder.append(getCliente().getNome());
+		builder.append("\n\nDetalhes \n");
+		for(ItemPedido i : getItens()) {
+			builder.append(i.toString());
+		}
+		builder.append("\n Valor Total: ");
+		builder.append(n.format(getValorTotal()));
+		return builder.toString();
 	}
 	
 	

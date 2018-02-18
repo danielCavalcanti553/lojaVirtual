@@ -2,7 +2,8 @@ package com.tcc.lojavirtual.domain.enums;
 
 
 public enum Perfil {
-	
+	// Tipos de perfis do sistema
+	// Prefixo ROLE_ é padrão do Spring Boot
 	ADMIN(1,"ROLE_ADMIN"),
 	CLIENTE(2,"ROLE_CLIENTE");
 	

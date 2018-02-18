@@ -38,11 +38,13 @@ public class Cliente implements Serializable{
 	private String estado;
 	private String telefone;
 	
-	@Column(unique=true)
+	@Column(unique=true) // Não pode haver repetição no email
 	private String email;
 	
-	@JsonIgnore
+	@JsonIgnore //Senha não será enviada no JSON
 	private String senha;
+	
+	private String imageUrl;
 	
 	@OneToMany(mappedBy="cliente")
 	private List<Pedido> pedidos = new ArrayList<Pedido>();
@@ -151,6 +153,15 @@ public class Cliente implements Serializable{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 
 	@Override
 	public int hashCode() {
@@ -176,6 +187,7 @@ public class Cliente implements Serializable{
 			return false;
 		return true;
 	}
+
 	
 	
 	

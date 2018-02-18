@@ -39,19 +39,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JWTUtil jwtUtil;
 	
+	// URL liberadas (Teste)
 	private static final String[] PUBLIC_MATCHERS = {
 			"/h2-console/**"
 	};
 
+	// URL GET Liberadas sem login
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
 			"/categorias/**",
-			"/clientes/**"
+			"/clientes/**",
+			"/pedidos/**"
 	};
 	
+	// URL POST Liberadas sem login
 	private static final String[] PUBLIC_MATCHERS_POST = {
-			"/clientes/**",
-			"/auth/forgot**"
+			"/clientes",
+			"/clientes/picture",
+			"/auth/forgot**",
+			"/pedidos/**"
 	};
 
 	@Override
@@ -61,7 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.headers().frameOptions().disable();
         }
 		
+		// Desativando CSRF (Ataques em session), não estamos utilizando sessão
 		http.cors().and().csrf().disable();
+		// Atribuindo as pemissões (array)
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
@@ -69,6 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
+		// Assegurar que nenhuma sessão será criada ou utilizada pelo Spring Security
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	

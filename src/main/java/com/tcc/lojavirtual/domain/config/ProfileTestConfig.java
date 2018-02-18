@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.tcc.lojavirtual.service.EmailService;
+import com.tcc.lojavirtual.service.MockEmailService;
 import com.tcc.lojavirtual.service.ProfileTestDados;
 
 @Configuration
@@ -18,5 +20,10 @@ public class ProfileTestConfig {
 	public boolean instanciarBD() throws Exception {
 		profileTestDados.insereDados();
 		return true;
+	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new MockEmailService();
 	}
 }

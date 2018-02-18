@@ -4,8 +4,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.tcc.lojavirtual.domain.Cliente;
 import com.tcc.lojavirtual.domain.ItemPedido;
 import com.tcc.lojavirtual.domain.Pedido;
 import com.tcc.lojavirtual.repository.ClienteRepository;
@@ -13,6 +18,8 @@ import com.tcc.lojavirtual.repository.ItemPedidoRepository;
 import com.tcc.lojavirtual.repository.PagamentoRepository;
 import com.tcc.lojavirtual.repository.PedidoRepository;
 import com.tcc.lojavirtual.repository.ProdutoRepository;
+import com.tcc.lojavirtual.security.UserSecurity;
+import com.tcc.lojavirtual.service.exception.AuthorizationException;
 import com.tcc.lojavirtual.service.exception.NotFoundObjectException;;
 @Service
 public class PedidoService {
@@ -31,6 +38,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+
+	@Autowired // Configurado com @Bean em ProfileTestConfig
+	private EmailService emailService; 
 	
 	public Pedido find(Integer id) {
 		Pedido obj = pedidoRepository.findOne(id);
@@ -68,9 +78,23 @@ public class PedidoService {
 		pagamentoRepository.save(obj.getPagamento());
 		itemPedidoRepository.save(obj.getItens());
 		
+		emailService.sendConfirmationPedidoEmail(obj);
+		
 		return obj;
 	}
 	
-
+	// Obtem pedidos paginados do usuário logado
+	public Page<Pedido> findPage(Integer page, Integer linesPage, String order, String direction){
+		
+		UserSecurity user = UserService.authenticated(); 
+		if(user==null) throw new AuthorizationException("Acesso Negado");
+		
+		PageRequest pageRequest = new PageRequest(page, linesPage, Direction.valueOf(direction),order);
+		
+		Cliente cliente = clienteRepository.findOne(user.getId());
+		
+		return pedidoRepository.findByCliente(cliente, pageRequest);
+		
+	}
 	
 }

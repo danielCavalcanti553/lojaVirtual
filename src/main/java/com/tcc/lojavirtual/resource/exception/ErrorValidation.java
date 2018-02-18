@@ -5,25 +5,25 @@ import java.util.List;
 
 
 
-public class ErrorValidation extends StandardError{
+
+public class ErrorValidation extends StandardError {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<FieldMessage> list = new ArrayList<>();
+	private List<FieldMessage> erros = new ArrayList<>();
 
-	public ErrorValidation(Integer status, String msg, Long timestamp) {
-		super(status, msg, timestamp);
+
+	public ErrorValidation(Long timestamp, Integer status, String error, String message, String path) {
+		super(timestamp, status, error, message, path);
 	}
 
 	public List<FieldMessage> getErrors() {
-		return list;
+		return erros;
 	}
 
-	public void setError(String fieldName,String msg) {
-		list.add(new FieldMessage(fieldName,msg));
+	public void addError(String fileName, String message) {
+		erros.add(new FieldMessage(fileName,message));
 	}
-	
-	
-	
+
 	
 }

@@ -1,5 +1,6 @@
 package com.tcc.lojavirtual.service;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tcc.lojavirtual.domain.Cliente;
+import com.tcc.lojavirtual.domain.enums.Perfil;
 import com.tcc.lojavirtual.dto.ClienteDTO;
 import com.tcc.lojavirtual.dto.ClienteNewDTO;
 import com.tcc.lojavirtual.repository.ClienteRepository;
+import com.tcc.lojavirtual.security.UserSecurity;
+import com.tcc.lojavirtual.service.exception.AuthorizationException;
 import com.tcc.lojavirtual.service.exception.DataIntegrityException;
 import com.tcc.lojavirtual.service.exception.NotFoundObjectException;;
 
@@ -26,7 +31,19 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 
+	@Autowired
+	private S3Service s3Service;
+	
 	public Cliente find(Integer id) {
+		// pegar o usuário logado
+		UserSecurity user = UserService.authenticated();
+		
+		// Verificar se o usuário logado tem autorização para visualizar o usuário solicitado 
+		//e não for administrador lança um AuthorizationException
+		if(user==null ||  !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) 
+			throw new AuthorizationException("Acesso Negado!");
+		
+		
 		Cliente obj = clienteRepository.findOne(id);
 		if (obj == null)
 			throw new NotFoundObjectException("Cliente Não encontrado! " + id + ", Tipo " + Cliente.class.getName());
@@ -81,6 +98,10 @@ public class ClienteService {
 		}catch(DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir um cliente que possui pedidos");
 		}
+	}
+	// Serviço de Upload de imagem (S3Service)
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 
 }
