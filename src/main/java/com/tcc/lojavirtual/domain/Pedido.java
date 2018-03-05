@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Pedido implements Serializable{
@@ -31,11 +32,23 @@ public class Pedido implements Serializable{
 	
 	@JsonFormat(pattern="dd/mm/yyyy hh:mm")
 	private Date dataPedido;
-
+	
 	
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
 	
+	
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
+	private NotaFiscal notaFiscal;
+	
+	public NotaFiscal getNotaFiscal() {
+		return notaFiscal;
+	}
+
+	public void setNotaFiscal(NotaFiscal notaFiscal) {
+		this.notaFiscal = notaFiscal;
+	}
+
 	@ManyToOne
 	@JoinColumn(name="cliente_codigo_cliente")
 	private Cliente cliente;
@@ -138,7 +151,9 @@ public class Pedido implements Serializable{
 		builder.append("Pedido Nùmero: ");
 		builder.append(getCodigoPedido());
 		builder.append("\nData: ");
-		builder.append(s.format(getDataPedido()));
+		builder.append(getCodigoPedido());
+		builder.append("\nCódigo NFE: ");
+		builder.append(getNotaFiscal().getNumeroNfe());
 		builder.append("\nCliente: ");
 		builder.append(getCliente().getNome());
 		builder.append("\n\nDetalhes \n");

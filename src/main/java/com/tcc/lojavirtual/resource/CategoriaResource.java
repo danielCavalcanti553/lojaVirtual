@@ -34,13 +34,15 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
 	
+	
+	// USE CASE: Visualizar Produtos
 	@RequestMapping(value="/produtos",method=RequestMethod.GET)
 	public ResponseEntity<List<Categoria>> findAllAndProduto(){
 		List<Categoria> list = categoriaService.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
-	
+	// USE CASE: Visualizar Categorias
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll(){
 		List<Categoria> list = categoriaService.findAll();
@@ -48,6 +50,7 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(dto);
 	}
 	
+	// USE CASE: Cadastrar Categoria
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto){
@@ -58,6 +61,8 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	
+	// USE CASE: Atualizar Categoria
 	@PreAuthorize("hasAnyRole('ADMIN')") 
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id){
@@ -70,6 +75,7 @@ public class CategoriaResource {
 	}
 
 	
+	// USE CASE: Excluir Categoria
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
@@ -78,7 +84,7 @@ public class CategoriaResource {
 	}
 	
 	
-	
+	// USE CASE: Visualizar Categorias (Alternativo Paginado)
 	@RequestMapping(value="/page",method=RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaDTO>> findPage(
 			@RequestParam(value="page", defaultValue="0") Integer page, 

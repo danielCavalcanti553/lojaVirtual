@@ -1,9 +1,11 @@
 package com.tcc.lojavirtual.service;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,12 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tcc.lojavirtual.security.UserSecurity;
+import com.tcc.lojavirtual.service.UserService;
 import com.tcc.lojavirtual.domain.Cliente;
 import com.tcc.lojavirtual.domain.enums.Perfil;
 import com.tcc.lojavirtual.dto.ClienteDTO;
 import com.tcc.lojavirtual.dto.ClienteNewDTO;
 import com.tcc.lojavirtual.repository.ClienteRepository;
-import com.tcc.lojavirtual.security.UserSecurity;
 import com.tcc.lojavirtual.service.exception.AuthorizationException;
 import com.tcc.lojavirtual.service.exception.DataIntegrityException;
 import com.tcc.lojavirtual.service.exception.NotFoundObjectException;;
@@ -33,6 +36,16 @@ public class ClienteService {
 
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	private ImageService imageService;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
+	
+
+	@Value("${img.profile.size}")
+	private int size;
 	
 	public Cliente find(Integer id) {
 		// pegar o usuário logado
@@ -111,9 +124,46 @@ public class ClienteService {
 			throw new DataIntegrityException("Não é possível excluir um cliente que possui pedidos");
 		}
 	}
+	
+	
 	// Serviço de Upload de imagem (S3Service)
-	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		return s3Service.uploadFile(multipartFile);
+	public URI uploadProfilePicture(MultipartFile multiPart) {
+		UserSecurity user = UserService.authenticated();
+
+	if (user == null) {
+		throw new AuthorizationException("Acesso negado");
 	}
+
+	// Extrair arquivo JPG da requisição
+	BufferedImage jpgImage = imageService.getJpgImageFromFile(multiPart);
+	jpgImage = imageService.cropSquare(jpgImage);
+	jpgImage = imageService.resize(jpgImage, size);
+
+	// definindo nome do arquivo
+	String fileName = prefix + user.getId() + ".jpg";
+
+	return s3Service.uploadFile(imageService.getInputStrem(jpgImage, "jpg"), fileName, "image");
+	}
+	
+	/*
+			UserSS user = UserService.authenticated();
+
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		// Extrair arquivo JPG da requisição
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multiPart);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
+
+		// definindo nome do arquivo
+		String fileName = prefix + user.getId() + ".jpg";
+
+		return s3Service.uploadFile(imageService.getInputStrem(jpgImage, "jpg"), fileName, "image");
+	 * 
+	 * */
+	
+
 
 }

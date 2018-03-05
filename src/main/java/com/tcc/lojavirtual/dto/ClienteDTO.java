@@ -1,8 +1,13 @@
 package com.tcc.lojavirtual.dto;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.tcc.lojavirtual.domain.Cliente;
+import com.tcc.lojavirtual.domain.enums.Perfil;
 import com.tcc.lojavirtual.services.validation.ClienteUpdate;
 
 @ClienteUpdate
@@ -20,6 +25,8 @@ public class ClienteDTO implements Serializable{
 	private String email;
 	private String senha;
 	
+	private Set<Integer> perfis = new HashSet<>();
+	
 	public ClienteDTO(Cliente c) {
 		this.codigoCliente = c.getCodigoCliente();
 		this.cpf = c.getCpf();
@@ -29,6 +36,11 @@ public class ClienteDTO implements Serializable{
 		this.estado = c.getEstado();
 		this.telefone = c.getTelefone();
 		this.email = c.getEmail();
+		
+		for(Perfil perfil : c.getPerfis()) {
+			this.perfis.add(perfil.getCod());
+		}
+		
 	}
 
 	public ClienteDTO() {
@@ -106,6 +118,14 @@ public class ClienteDTO implements Serializable{
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	public Set<Integer> getPerfis() {
+		return perfis;
+	}
+
+	public void setPerfis(Set<Integer> perfis) {
+		this.perfis = perfis;
 	}
 	
 	

@@ -28,7 +28,7 @@ public class PedidoResource {
 	@Autowired
 	private PedidoService pedidoService;
 	
-	
+	// USE CASE: Visualiza Pedido
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<Pedido> find(@PathVariable Integer id){
 		Pedido obj = pedidoService.find(id);
@@ -36,14 +36,14 @@ public class PedidoResource {
 	}
 	
 	
-	/* BUSCA TODOS OS PEDIDOS
-	@RequestMapping(method=RequestMethod.GET)
+	// USE CASE: NULL
+	@RequestMapping(value="/all",method=RequestMethod.GET)
 	public ResponseEntity<List<Pedido>> findAll(){
 		List<Pedido> list = pedidoService.findAll();
 		return ResponseEntity.ok().body(list);
-	}*/
+	}
 	
-	
+	// USE CASE: Realizar Pedido
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody Pedido obj){
 		
@@ -53,6 +53,8 @@ public class PedidoResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	
+	// USE CASE: Visualizar Pedidos (Paginado)
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<Page<Pedido>> findPage(
 			@RequestParam(value="page", defaultValue="0") Integer page, 

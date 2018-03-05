@@ -13,9 +13,13 @@ import com.tcc.lojavirtual.security.UserSecurity;
 @Service
 public class UserDatailsServiceImpl implements UserDetailsService{
 	
+	
+	
 	@Autowired
 	private ClienteRepository repo;	
 	
+	// USE CASE: Autenticar
+	// Padrão Spring
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		

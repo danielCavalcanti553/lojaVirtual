@@ -31,19 +31,23 @@ public class ClienteResource {
 	@Autowired
 	private ClienteService clienteService;
 	
-	
+	// USE CASE: Visualizar Cliente
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<Cliente> find(@PathVariable Integer id){
 		Cliente obj = clienteService.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	
+	// USE CASE: Visualizar Cliente (Alternativo por E-mail)
 	@RequestMapping(value="/email",method=RequestMethod.GET)
 	public ResponseEntity<Cliente> find(@RequestParam(name="value") String email){
 		Cliente obj = clienteService.findByEmail(email);
 		return ResponseEntity.ok().body(obj);
 	}	
 	
+	
+	// USE CASE: Visualizar Clientes
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<ClienteDTO>> findAll(){
 		List<Cliente> list = clienteService.findAll();
@@ -51,7 +55,7 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(dto);
 	}
 	
-	
+	// USE CASE: Visualizar Clientes (Alternativo - paginado)
 	@RequestMapping(value="/page",method=RequestMethod.GET)
 	public ResponseEntity<Page<ClienteDTO>> findPage(
 			@RequestParam(value="page", defaultValue="0") Integer page, 
@@ -66,7 +70,7 @@ public class ClienteResource {
 	}
 	
 
-	
+	// USE CASE: Cadastrar Cliente
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
 		Cliente obj = clienteService.fromNewDTO(objDto);
@@ -77,7 +81,7 @@ public class ClienteResource {
 	}
 	
 	
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	// USE CASE: Atualizar Cliente
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody ClienteDTO objDto){
 		Cliente obj = clienteService.fromDTO(objDto);
@@ -87,6 +91,7 @@ public class ClienteResource {
 	}
 	
 	
+	// USE CASE: Excluir Cliente
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
@@ -94,6 +99,8 @@ public class ClienteResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	
+	// USE CASE: Atualizar Foto
 	// Expondo serviço de upload de foto
 	@RequestMapping(value="/picture",method=RequestMethod.POST)
 	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name="file") MultipartFile file){
@@ -103,5 +110,10 @@ public class ClienteResource {
 		
 		return ResponseEntity.created(uri).build();
 	}
+	
+	
+	// USE CASE: Autenticar
+	// Realizado pelo UserDatailsServiceImpl
+	// Padrão do Framework Spring, recurso /login
 	
 }

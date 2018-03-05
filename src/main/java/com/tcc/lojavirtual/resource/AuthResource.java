@@ -31,6 +31,8 @@ public class AuthResource {
 	@Autowired
 	private AuthService service; 
 	
+	
+	// USE CASE: Atualizar Token
 	@RequestMapping(value = "/refresh_token", method = RequestMethod.POST)
 	public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
 		UserSecurity user = UserService.authenticated();
@@ -40,7 +42,9 @@ public class AuthResource {
 		response.addHeader("access-control-expose-headers", "Authorization");
 		return ResponseEntity.noContent().build();
 	}
-
+	
+	
+	// USE CASE: Enviar Senha
 	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
 	public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO objDTO) {
 		service.sendNewPassword(objDTO.getEmail());
